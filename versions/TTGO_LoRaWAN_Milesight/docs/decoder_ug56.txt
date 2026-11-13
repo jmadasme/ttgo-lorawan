@@ -1,0 +1,23 @@
+function Decode(fPort, bytes) {
+  var lat = bytes[0] | bytes[1]<<8 | bytes[2]<<16 | bytes[3]<<24;
+  if (lat & 0x80000000) lat -= 0x100000000;
+  var lng = bytes[4] | bytes[5]<<8 | bytes[6]<<16 | bytes[7]<<24;
+  if (lng & 0x80000000) lng -= 0x100000000;
+  var g = bytes[9];
+  var adc = bytes[10];
+  return {
+    gpsFix: (bytes[8] & 8) ? 1 : 0,
+    lat: Number((lat/1e7).toFixed(7)),
+    lng: Number((lng/1e7).toFixed(7)),
+    sats: bytes[8] >> 4,
+    gpio26: bytes[8] & 1,
+    GPIO2: g & 1,
+    GPIO13: (g>>2) & 1,
+    GPIO14: (g>>3) & 1,
+    GPIO15: (g>>4) & 1,
+    GPIO16: (g>>5) & 1,
+    GPIO17: (g>>6) & 1,
+    GPIO25: (g>>7) & 1,
+    adcV: Number((adc/255*3.3).toFixed(2))
+  };
+}
