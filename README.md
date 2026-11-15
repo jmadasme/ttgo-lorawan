@@ -33,6 +33,64 @@ arduino-cli compile --fqbn esp32:esp32:tbeam .
 
 El FQBN exacto depende del core instalado. Las claves LoRaWAN y la configuración regional no se incluyen.
 
+<!-- ficha -->
+## Ficha de evaluación
+
+**Madurez global: 3.5/5**
+
+| Criterio | Nota | Evidencia |
+|---|---:|---|
+| Madurez | 3/5 | Diez iteraciones de firmware con join estable y downlink probado; no hay cola ni confirmación de aplicación. |
+| Reproducibilidad | 3/5 | Pinout, región y claves están documentados; el datasheet aún declara US915 mientras el código final usa AU915. |
+| Documentación | 5/5 | Bitácora con síntoma, causa y corrección para ocho problemas, más datasheet y guía de desarrollador. |
+| Honestidad de límites | 4/5 | Expone el conflicto de GPIO4, la dependencia de un gateway concreto y la falta de confirmación en downlink. |
+| Valor demostrativo | 4/5 | Concentra los errores típicos de un bring-up LoRaWAN con SX1262 en un caso verificable de punta a punta. |
+| Facilidad de despliegue | 2/5 | Requiere claves OTAA, gateway compatible y revisión de pinout antes de compilar y cargar el nodo. |
+
+Bring-up LoRaWAN documentado con detalle: cuatro causas distintas de un nodo que no se une y su corrección. El firmware sirve para T-Beam v1.1 y un gateway Milesight UG56.
+
+## Lo que no funcionó
+
+### TTGO_LoRaWAN_Milesight — Switch RF sin configurar
+
+El código original no activaba el control del switch PE4259, así que el SX1262 respondía por SPI pero no emitía señal. El gateway no veía ni los Join Requests y el dispositivo figuraba como nunca activado. Se resolvió con radio.setDio2AsRfSwitch(true).
+
+### TTGO_LoRaWAN_Milesight — Región y JoinEUI equivocados
+
+El firmware usaba US915 y un JoinEUI generado a mano, mientras el UG56 operaba en AU915 con un JoinEUI propio que asigna al registrar. Los paquetes salían en una banda que el gateway no monitoreaba. Se cambió la región y se tomó el JoinEUI observado en los Incoming Packets.
+
+### TTGO_LoRaWAN_Milesight — Payload demasiado largo
+
+Catorce bytes provocaban PACKET_TOO_LONG en DR0-DR2, y doce seguían desbordando hasta causar un crash por stack smashing. Se redujo a once bytes exactos, con GPS, GPIO y ADC comprimidos en ese espacio, y el error desapareció en las pruebas siguientes.
+
+### TTGO_LoRaWAN_Milesight — DevNonce repetido tras cada reinicio
+
+Cada ciclo de alimentación reiniciaba el DevNonce a cero y el servidor rechazaba el join por anti-replay, con código -1116. La solución fue guardar y restaurar el buffer de nonces en NVS, de modo que solo un reflash del firmware limpia la sesión.
+
+## Preguntas típicas
+
+**¿Qué placa es?**
+
+TTGO T-Beam v1.1 con ESP32 y SX1262.
+
+**¿Por qué no transmite?**
+
+Revisá la región, las claves y el switch RF PE4259/DIO2.
+
+**¿El GPS funciona en interiores?**
+
+No. Necesita cielo abierto para obtener fix.
+
+**¿Qué gateway usa?**
+
+Milesight UG56, aunque otro gateway LoRaWAN compatible debería servir.
+
+**¿El downlink es confiable?**
+
+Es una acción simple sobre el LED; no hay cola ni confirmación de aplicación.
+
+<!-- /ficha -->
+
 ## Documentación
 
 - [`docs/datasheet.md`](docs/datasheet.md) — instalación, operación y límites.
@@ -40,9 +98,9 @@ El FQBN exacto depende del core instalado. Las claves LoRaWAN y la configuració
 - [`docs/REFERENCES.md`](docs/REFERENCES.md) — estándares, librerías y fuentes.
 - [`docs/index.html`](docs/index.html) — página del proyecto (GitHub Pages).
 
-## Alcance y honestidad
+## El proyecto en detalle
 
-## TTGO T-Beam V1.1 — Nodo LoRaWAN para Gateway Milesight UG56
+### TTGO T-Beam V1.1 — Nodo LoRaWAN para Gateway Milesight UG56
 
 Firmware para **TTGO T-Beam V1.1** (ESP32 + SX1262) que envía datos de geolocalización GPS, estados GPIO y lectura ADC vía LoRaWAN a un gateway **Milesight UG56** con servidor de red embebido. Control remoto de LED integrado vía downlink.
 
