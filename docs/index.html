@@ -205,12 +205,14 @@ h2{font-size:clamp(30px,4vw,46px);line-height:1.05;letter-spacing:-.04em;margin:
 
 </style>
 <link rel="stylesheet" href="assets/community.css?v=1">
+<link href="rec/player.css?v=1" rel="stylesheet"/>
 </head>
 <body>
 <header class="nav"><div class="wrap nav-in">
   <a class="brand" href="/"><span class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/></svg></span><span>jmadasme<span style="color:var(--accent)">.</span>portfolio</span></a>
   <nav class="nav-links">
-    <a href="#proyecto">Proyecto</a><a href="#versiones">Versiones</a><a href="#stack">Stack</a><a href="#docs">Docs</a><a href="#comunidad">Comunidad</a>
+    <a href="#proyecto">Proyecto</a><a href="#versiones">Versiones</a><a href="#stack">Stack</a><a href="#video">Video</a>
+<a href="#docs">Docs</a><a href="#comunidad">Comunidad</a>
     <a class="btn btn-ghost" style="padding:9px 15px" href="/iot/">← IoT</a>
   </nav>
 </div></header>
@@ -242,6 +244,45 @@ h2{font-size:clamp(30px,4vw,46px);line-height:1.05;letter-spacing:-.04em;margin:
     <div class="card reveal"><span class="tag">Solución</span><h3>La propuesta</h3><p>Configurar el radio y el switch, enviar un payload con GPS y sensores, y usar downlinks para acciones simples como el LED.</p></div>
   </div>
 </div></section>
+
+
+<section class="section tight rec-section" id="video" style="--accent:#2E7DFF;--accent2:#14F195">
+<div class="wrap">
+<div class="rec-kicker">REC · VIDEO · 3:08</div>
+<h2 class="rec-h2">TTGO T-Beam: un nodo LoRaWAN que sí se une</h2>
+<p class="rec-lead">Cómo un T-Beam v1.1 arma un uplink de 11 bytes con GPS, GPIOs y ADC, y recibe comandos por downlink desde un gateway Milesight.</p>
+<div class="rec-banner">
+<span class="rec-banner-icon">📋</span>
+<strong>Puedes copiar y pegar los comandos del video desde el video !!!</strong>
+<span>Pausá, seleccioná el texto de la terminal y copiá.</span>
+</div>
+<div class="rec-shell">
+<div class="rec-bar"><i></i><i></i><i></i><span class="rec-title">TTGO T-Beam: un nodo LoRaWAN que sí se une · asciinema</span><span class="rec-rec"><b></b>REC</span></div>
+<div class="rec-screen-wrap">
+<div class="rec-screen" id="rec-screen"></div>
+<div class="rec-poster" id="rec-poster">
+<div class="rec-kicker">ASCIINEMA · 3:08</div>
+<h3>TTGO T-Beam: un nodo LoRaWAN que sí se une</h3>
+<p>Cómo un T-Beam v1.1 arma un uplink de 11 bytes con GPS, GPIOs y ADC, y recibe comandos por downlink desde un gateway Milesight.</p>
+<div class="rec-poster-meta">ttgo-lorawan · código real</div>
+<button class="rec-btn rec-primary" id="rec-start" type="button">▶ Reproducir</button>
+</div>
+</div>
+<div class="rec-controls">
+<button class="rec-btn rec-primary" id="rec-play" type="button">▶ Reproducir</button>
+<button class="rec-btn" id="rec-restart" type="button">↺ Reiniciar</button>
+<input class="rec-progress" id="rec-range" type="range" min="0" max="1000" value="0" aria-label="Progreso"/>
+<span class="rec-time" id="rec-time">0:00 / 3:08</span>
+<select class="rec-speed" id="rec-speed" aria-label="Velocidad"><option value="1">1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
+<button class="rec-btn" id="rec-full" type="button" title="Pantalla completa">⛶</button>
+<button class="rec-btn" id="rec-copy" type="button">⧉ Copiar comandos</button>
+<a class="rec-download" href="rec/ttgo-lorawan.cast" download>descargar .cast</a>
+</div>
+</div>
+<p class="rec-note">Los fragmentos son del código real. Las credenciales OTAA del archivo no se reproducen y deben rotarse si alguna vez se publicaron.</p>
+<div class="rec-chapters"><span class="rec-chip"><b>0:06</b> EL PROBLEMA</span><span class="rec-chip"><b>0:21</b> HARDWARE</span><span class="rec-chip"><b>0:36</b> ENERGÍA</span><span class="rec-chip"><b>0:49</b> RADIO</span><span class="rec-chip"><b>1:06</b> REGIÓN</span><span class="rec-chip"><b>1:19</b> SESIÓN</span><span class="rec-chip"><b>1:37</b> GPS</span><span class="rec-chip"><b>1:53</b> PAYLOAD</span><span class="rec-chip"><b>2:09</b> DOWNLINK</span><span class="rec-chip"><b>2:27</b> TRANSMISIÓN</span><span class="rec-chip"><b>2:44</b> DECODIFICADOR</span></div>
+</div>
+</section>
 
 <section class="section" id="versiones"><div class="wrap">
   <div class="section-head reveal"><div class="kicker">02 — Versiones</div><h2>La historia, completa.</h2><p class="section-sub">Cada carpeta conserva una etapa del proyecto. No se borraron las anteriores: se pusieron en contexto.</p></div>
@@ -537,5 +578,7 @@ arduino-cli monitor --port /dev/ttyUSB0 --config baudrate=115200
 <script>window.PORTFOLIO_COMMUNITY={account:"jmadasme",repo:"ttgo-lorawan",coinNamespace:"jmadasme-ttgo-lorawan-coins-v1",faqs:[{"q": "¿Qué placa es?", "a": "TTGO T-Beam v1.1 con ESP32 y SX1262."}, {"q": "¿Por qué no transmite?", "a": "Revisá la región, las claves y el switch RF PE4259/DIO2."}, {"q": "¿El GPS funciona en interiores?", "a": "No. Necesita cielo abierto para obtener fix."}, {"q": "¿Qué gateway usa?", "a": "Milesight UG56, aunque otro gateway LoRaWAN compatible debería servir."}, {"q": "¿El downlink es confiable?", "a": "Es una acción simple sobre el LED; no hay cola ni confirmación de aplicación."}]};</script>
 <script src="assets/community.js?v=2" defer></script>
 
+<script defer src="rec/ttgo-lorawan.cast.js?v=1"></script>
+<script defer src="rec/player.js?v=1"></script>
 </body>
 </html>
